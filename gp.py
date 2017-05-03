@@ -19,13 +19,13 @@ def get_data(n_points):
 	return x, y, u
 
 
-def plot_data_and_draws(x, y, u, x_t, G):
+def plot_data_and_draws(x, y, u, x_t, G, y_b):
 
 	plt.errorbar(x, y, yerr=u, fmt='.k')
 	x_l = np.linspace(x[0], x[-1], 75)
 	plt.plot(x_l, f(x_l), label='Ground Truth', color='k')
 	plt.plot(x_t, G, color='#4682b4', lw=1, alpha=0.4)
-	plt.plot(x_t, np.mean(G, axis=1), label='Mean', color='r')
+	plt.plot(x_t, y_b, label='Mean', color='r')
 	plt.legend()
 
 	plt.show()
@@ -56,8 +56,9 @@ def gpr(x, y, u, x_test, params):
 	mu = np.dot(Lk.T, np.linalg.solve(L, y.reshape(-1, 1)))
 	L = np.linalg.cholesky(K_ss + 1e-6*np.eye(100) - np.dot(Lk.T, Lk))
 	G = mu.reshape(-1,1) + np.dot(L, np.random.normal(size=(len(x_test), n_draws)))
+	y_bar = np.dot(np.dot(K_s.T, np.linalg.inv(K)), y.reshape(-1, 1))
 
-	plot_data_and_draws(x, y, u, x_test, G)
+	plot_data_and_draws(x, y, u, x_test, G, y_bar)
 
 
 def logl(theta, x, y, u, x_test):
