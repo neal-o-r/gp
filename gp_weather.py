@@ -14,10 +14,10 @@ def get_data():
 	df['maxtp'] = df.maxtp.apply(lambda x: 0 if x ==' ' else float(x))
 	df.index = df.date
 	
-	df_g = df.resample('1W').max()
+	df_g = df.maxtp.resample('1W', how='mean')
 
 	d = np.array(df_g.index)
-	y = np.array(df_g.maxtp)
+	y = np.array(df_g.values)
 	u = 0.5 * np.random.randn(len(d))
 	x = np.arange(len(d))
 	y[~np.isfinite(y.ravel())] = 20.
@@ -107,8 +107,7 @@ def plot_data_and_draws(d, y, u, dt, G, y_b, t=0):
 
 	plt.errorbar(d, y, yerr=u, fmt='.k')
 	plt.plot(dt, G, color='#4682b4', lw=1, alpha=0.4)
-	plt.plot(dt, y_b, label='Mean', color='r')
-	plt.title('Periodicity: {0:.1f} weeks'.format(t))
+	plt.plot(dt, y_b, label='$P =$ {0:.2f}weeks'.format(t), color='r')
 	plt.legend()
 
 	plt.show()
