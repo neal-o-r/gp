@@ -70,6 +70,7 @@ def plot_all(x, y, u, x_s, theta):
                 plt.plot(x_s, np.random.multivariate_normal(mu.ravel(), C),
                                  color='#4682b4', lw=1, alpha=0.4)
 
+        plt.plot(x_s, mu, color='k')
         plt.errorbar(x.ravel(), y.ravel(), yerr=u, fmt='ok')
         plt.show()
 
